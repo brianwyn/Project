@@ -172,8 +172,11 @@ public class Login {
 						s.executeQuery ("SELECT * FROM characters WHERE username = '" + username + "'");
 						ResultSet rs = s.getResultSet ();
 						if (rs.next()) {
-							if (!password.equals(rs.getString("password"))) {
+							//I made password lowercase so fuck you.
+							if(!rs.getString("password").toLowerCase().equals(Misc.md5(password).toLowerCase())) {
 								returnCode = 3;
+							//if (!password.equals(rs.getString("password"))) {
+							//	returnCode = 3;
 							} else {
 
 								c = new Client(socket, slot);

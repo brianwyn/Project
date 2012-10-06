@@ -1,5 +1,7 @@
 package com.rs2.util;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -7,6 +9,19 @@ import java.util.GregorianCalendar;
 import com.rs2.GameEngine;
 
 public class Misc {
+	
+	private static MessageDigest md;
+	
+	/**
+	 * Creates an instance of the message digest used for creating md5 hashes
+	 */
+	static {
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (Exception e) {
+		}
+	}
+
 
 	public static void print_debug(String str) {
 		if (GameEngine.isDebugEnabled())
@@ -134,6 +149,23 @@ public class Misc {
 		return "";
 	}
 
+	
+	/**
+	 * returns the md5 hash of a string
+	 */
+	public static String md5(String s) {
+		synchronized (md){
+			md.reset();
+			md.update(s.getBytes());
+			return toHex(md.digest());
+		}
+	}
+	
+	public static String toHex(byte[] bytes) {
+		// change below to lower or uppercase X to control case of output
+		return String.format("%0" + (bytes.length << 1) + "x", new BigInteger(1, bytes));
+	}
+	
 	public static String Hex(byte data[]) {
 		return Hex(data, 0, data.length);
 	}
